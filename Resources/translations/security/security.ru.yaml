@@ -1,0 +1,11 @@
+# Role
+
+FINANCES:
+  header: 'Финансы'
+  name: 'Финансы'
+  desc: 'Финансы'
+
+# Rules
+FINANCES_INDEX:
+  name: 'View'
+  desc: ''
