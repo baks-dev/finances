@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class FinancesProductDTO implements FinancesProductInterface
 {
     /** Значение свойства */
-    private ?ProductInvariableUid $value;
+    private ?ProductInvariableUid $value = null;
 
     public function getValue(): ?ProductInvariableUid
     {

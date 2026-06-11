@@ -32,6 +32,7 @@ use BaksDev\Finances\UseCase\NewEdit\Marketplace\NewEditFinancesMarketplaceDTO;
 use BaksDev\Finances\UseCase\NewEdit\Order\NewEditFinancesOrderDTO;
 use BaksDev\Finances\UseCase\NewEdit\Product\FinancesProductDTO;
 use BaksDev\Reference\Money\Type\Money;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /** @see FinancesEvent */
@@ -62,6 +63,9 @@ final class NewEditFinancesDTO implements FinancesEventInterface
     /** Стоимость */
     #[Assert\NotBlank]
     private Money $price;
+
+    /** Комментарий */
+    private ?string $comment;
 
     public function __construct()
     {
@@ -108,5 +112,16 @@ final class NewEditFinancesDTO implements FinancesEventInterface
     public function getProduct(): ?FinancesProductDTO
     {
         return $this->product;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
+        return $this;
     }
 }

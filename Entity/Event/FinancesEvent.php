@@ -90,6 +90,11 @@ class FinancesEvent extends EntityEvent
     #[ORM\Column(type: Money::TYPE)]
     private Money $price;
 
+    /** Комментарий */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $comment;
+
+
     /**
      * Модификатор
      */
