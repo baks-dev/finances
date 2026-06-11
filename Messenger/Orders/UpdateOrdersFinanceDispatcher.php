@@ -83,25 +83,12 @@ final readonly class UpdateOrdersFinanceDispatcher
             return;
         }
 
-        if(false === $FinancesEvent->isOrders())
+        if(false === $FinancesEvent->isOrders() || false === $FinancesEvent->isMarketpace())
         {
             $DeduplicatorExecute->save();
             return;
         }
 
-
-        $Deduplicator = $this->deduplicator
-            ->namespace('finances')
-            ->expiresAfter('1 day')
-            ->deduplication([
-                (string) $FinancesEvent->getOrderFinance(),
-                self::class,
-            ]);
-
-        if($Deduplicator->isExecuted())
-        {
-            return;
-        }
 
         /** Получаем сумму финансовых выплат по заказу */
 
@@ -124,6 +111,21 @@ final readonly class UpdateOrdersFinanceDispatcher
             }
         }
 
+
+        $Deduplicator = $this->deduplicator
+            ->namespace('finances')
+            ->expiresAfter('1 day')
+            ->deduplication([
+                (string) $FinancesEvent->getOrderFinance(),
+                $total,
+                self::class,
+            ]);
+
+        if($Deduplicator->isExecuted())
+        {
+            return;
+        }
+
         /** Обновляем экономику заказа */
         $OrderFinanceDTO = new OrderFinanceDTO()
             ->setMain($FinancesEvent->getOrderFinance())
@@ -140,6 +142,11 @@ final readonly class UpdateOrdersFinanceDispatcher
 
             return;
         }
+
+        $this->logger->info(
+            'Обновили информацию о финансовых выплатах заказа',
+            [self::class.':'.__LINE__, $FinancesEvent->getOrderFinance()],
+        );
 
         $Deduplicator->save();
     }

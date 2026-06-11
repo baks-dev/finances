@@ -27,6 +27,7 @@ namespace BaksDev\Finances\UseCase\NewEdit;
 
 
 use BaksDev\Core\Entity\AbstractHandler;
+use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Finances\Entity\Event\FinancesEvent;
 use BaksDev\Finances\Entity\Finances;
 use BaksDev\Finances\Messenger\Default\FinancesMessage;
@@ -50,10 +51,11 @@ final class NewEditFinancesHandler extends AbstractHandler
 
         $this->flush();
 
-        /* Отправляем сообщение в шину */
+        /* Отправляем отложенное сообщение в шину, чтобы учитывать все транзакции */
         $this->messageDispatch->dispatch(
             message: new FinancesMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
-            transport: 'finances',
+            stamps: [new MessageDelay('60 minutes')],
+            transport: 'finances-low',
         );
 
         return $this->main;

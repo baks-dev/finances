@@ -110,7 +110,7 @@ class FinancesOrder extends EntityReadonly
         throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
     }
 
-    public function getValue(): OrderUid
+    public function getOrderId(): OrderUid
     {
         return $this->value;
     }

@@ -51,7 +51,7 @@ final class NewEditFinancesDTO implements FinancesEventInterface
 
     /** FinancesOrder */
     #[Assert\Valid]
-    private ?NewEditFinancesOrderDTO $orders = null;
+    private ?NewEditFinancesOrderDTO $ord = null;
 
     /** FinancesMarketplace */
     #[Assert\Valid]
@@ -70,7 +70,7 @@ final class NewEditFinancesDTO implements FinancesEventInterface
     public function __construct()
     {
         $this->invariable = new NewEditFinancesInvariableDTO();
-        $this->orders = new NewEditFinancesOrderDTO();
+        $this->ord = new NewEditFinancesOrderDTO();
         $this->marketpace = new NewEditFinancesMarketplaceDTO();
         $this->product = new FinancesProductDTO();
     }
@@ -99,9 +99,9 @@ final class NewEditFinancesDTO implements FinancesEventInterface
         return $this->invariable;
     }
 
-    public function getOrders(): ?NewEditFinancesOrderDTO
+    public function getOrd(): ?NewEditFinancesOrderDTO
     {
-        return $this->orders;
+        return $this->ord;
     }
 
     public function getMarketpace(): ?NewEditFinancesMarketplaceDTO

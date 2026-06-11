@@ -174,7 +174,7 @@ class FinancesEvent extends EntityEvent
 
     public function getOrderFinance(): OrderUid
     {
-        return $this->ord->getValue();
+        return $this->ord->getOrderId();
     }
 
 
