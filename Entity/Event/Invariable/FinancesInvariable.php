@@ -67,7 +67,7 @@ class FinancesInvariable extends EntityReadonly
     /** Дата */
     #[Assert\NotBlank]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private DateTimeImmutable $create;
+    private DateTimeImmutable $created;
 
     public function __construct(FinancesEvent $event)
     {
@@ -108,5 +108,4 @@ class FinancesInvariable extends EntityReadonly
 
         throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
     }
-
 }

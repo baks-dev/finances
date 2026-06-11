@@ -24,6 +24,7 @@
 namespace BaksDev\Finances\Entity\Event\Invariable;
 
 use BaksDev\Users\User\Type\Id\UserUid;
+use DateTimeImmutable;
 
 interface FinancesInvariableInterface
 {
@@ -33,5 +34,7 @@ interface FinancesInvariableInterface
      * @see FinancesInvariable
      */
     public function getUsr(): UserUid;
+
+    public function getCreated(): DateTimeImmutable;
 
 }

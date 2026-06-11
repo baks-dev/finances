@@ -31,7 +31,6 @@ use BaksDev\Core\Services\Paginator\PaginatorInterface;
 use BaksDev\Finances\Entity\Event\FinancesEvent;
 use BaksDev\Finances\Entity\Event\Invariable\FinancesInvariable;
 use BaksDev\Finances\Entity\Event\Marketplace\FinancesMarketplace;
-use BaksDev\Finances\Entity\Event\Modify\FinancesModify;
 use BaksDev\Finances\Entity\Event\Order\FinancesOrder;
 use BaksDev\Finances\Entity\Finances;
 use BaksDev\Orders\Order\Entity\Event\Posting\OrderPosting;
@@ -82,6 +81,7 @@ final class AllFinanceRepository implements AllFinanceInterface
 
         $dbal
             ->addSelect('finances_invariable.usr as usr')
+            ->addSelect('finances_invariable.created AS date')
             ->join(
                 'finance',
                 FinancesInvariable::class,
@@ -132,15 +132,6 @@ final class AllFinanceRepository implements AllFinanceInterface
                 FinancesEvent::class,
                 'finances_event',
                 'finances_event.id = finance.event',
-            );
-
-        $dbal
-            ->addSelect('finances_modify.mod_date AS date')
-            ->leftJoin(
-                'finance',
-                FinancesModify::class,
-                'finances_modify',
-                'finances_modify.event = finance.event',
             );
 
         if($this->search instanceof SearchDTO && $this->search->getQuery())

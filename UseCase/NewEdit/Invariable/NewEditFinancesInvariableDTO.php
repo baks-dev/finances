@@ -40,7 +40,7 @@ final class NewEditFinancesInvariableDTO implements FinancesInvariableInterface
     private UserUid $usr;
 
     /** Дата */
-    private ?DateTimeImmutable $create = null;
+    private ?DateTimeImmutable $created = null;
 
     public function getUsr(): UserUid
     {
@@ -58,15 +58,15 @@ final class NewEditFinancesInvariableDTO implements FinancesInvariableInterface
         return $this;
     }
 
-    public function getCreate(): DateTimeImmutable
+    public function getCreated(): DateTimeImmutable
     {
-        $this->create ?: $this->create = new DateTimeImmutable();
-        return $this->create;
+        $this->created ?: $this->created = new DateTimeImmutable();
+        return $this->created;
     }
 
-    public function setCreate(DateTimeImmutable $create): self
+    public function setCreated(DateTimeImmutable $create): self
     {
-        $this->create = $create;
+        $this->created = $create;
         return $this;
     }
 }
