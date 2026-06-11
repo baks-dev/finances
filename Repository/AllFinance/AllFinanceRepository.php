@@ -28,9 +28,18 @@ namespace BaksDev\Finances\Repository\AllFinance;
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Core\Form\Search\SearchDTO;
 use BaksDev\Core\Services\Paginator\PaginatorInterface;
+use BaksDev\Finances\Entity\Event\FinancesEvent;
 use BaksDev\Finances\Entity\Event\Invariable\FinancesInvariable;
 use BaksDev\Finances\Entity\Event\Marketplace\FinancesMarketplace;
+use BaksDev\Finances\Entity\Event\Modify\FinancesModify;
+use BaksDev\Finances\Entity\Event\Order\FinancesOrder;
 use BaksDev\Finances\Entity\Finances;
+use BaksDev\Orders\Order\Entity\Event\Posting\OrderPosting;
+use BaksDev\Orders\Order\Entity\Invariable\OrderInvariable;
+use BaksDev\Orders\Order\Entity\Order;
+use BaksDev\Payment\Entity\Event\PaymentEvent;
+use BaksDev\Payment\Entity\Payment;
+use BaksDev\Payment\Entity\Trans\PaymentTrans;
 use BaksDev\Users\User\Repository\UserTokenStorage\UserTokenStorageInterface;
 use BaksDev\Users\User\Type\Id\UserUid;
 
@@ -63,14 +72,16 @@ final class AllFinanceRepository implements AllFinanceInterface
     /** Список всех платежей */
     public function findPaginator(): PaginatorInterface
     {
-        $dbal = $this->DBALQueryBuilder->createQueryBuilder(self::class);
+        $dbal = $this->DBALQueryBuilder
+            ->createQueryBuilder(self::class)
+            ->bindLocal();
 
         $dbal
             ->select('finance.id')
             ->from(Finances::class, 'finance');
 
         $dbal
-            ->select('finances_invariable.usr as usr')
+            ->addSelect('finances_invariable.usr as usr')
             ->join(
                 'finance',
                 FinancesInvariable::class,
@@ -84,11 +95,52 @@ final class AllFinanceRepository implements AllFinanceInterface
             );
 
         $dbal
+            ->addSelect('finances_marketplace.identifier AS identifier')
+            ->addSelect('finances_marketplace.number AS number')
+            ->addSelect('finances_marketplace.payment AS payment_id')
             ->leftJoin(
                 'finance',
                 FinancesMarketplace::class,
                 'finances_marketplace',
                 'finances_marketplace.main = finance.id',
+            );
+
+        $dbal
+            ->leftJoin(
+                'finance',
+                FinancesOrder::class,
+                'finances_order',
+                'finances_order.main = finance.id',
+            );
+
+        $dbal
+            ->addSelect('orders_posting.main AS order')
+            ->addSelect('orders_posting.value AS posting')
+            ->leftJoin(
+                'finances_order',
+                OrderPosting::class,
+                'orders_posting',
+                'orders_posting.main = finances_order.value',
+            );
+
+
+        $dbal
+            ->addSelect('finances_event.price AS price')
+            ->addSelect('finances_event.comment AS comment')
+            ->leftJoin(
+                'finance',
+                FinancesEvent::class,
+                'finances_event',
+                'finances_event.id = finance.event',
+            );
+
+        $dbal
+            ->addSelect('finances_modify.mod_date AS date')
+            ->leftJoin(
+                'finance',
+                FinancesModify::class,
+                'finances_modify',
+                'finances_modify.event = finance.event',
             );
 
         if($this->search instanceof SearchDTO && $this->search->getQuery())

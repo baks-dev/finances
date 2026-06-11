@@ -28,6 +28,8 @@ namespace BaksDev\Finances\UseCase\NewEdit\Invariable;
 use BaksDev\Finances\Entity\Event\Invariable\FinancesInvariableInterface;
 use BaksDev\Users\User\Entity\User;
 use BaksDev\Users\User\Type\Id\UserUid;
+use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /** @see FinancesInvariable */
@@ -36,6 +38,9 @@ final class NewEditFinancesInvariableDTO implements FinancesInvariableInterface
     /** Идентификатор пользователя */
     #[Assert\NotBlank]
     private UserUid $usr;
+
+    /** Дата */
+    private ?DateTimeImmutable $create = null;
 
     public function getUsr(): UserUid
     {
@@ -50,6 +55,18 @@ final class NewEditFinancesInvariableDTO implements FinancesInvariableInterface
         }
 
         $this->usr = $usr;
+        return $this;
+    }
+
+    public function getCreate(): DateTimeImmutable
+    {
+        $this->create ?: $this->create = new DateTimeImmutable();
+        return $this->create;
+    }
+
+    public function setCreate(DateTimeImmutable $create): self
+    {
+        $this->create = $create;
         return $this;
     }
 }

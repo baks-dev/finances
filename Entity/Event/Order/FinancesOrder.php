@@ -56,7 +56,7 @@ class FinancesOrder extends EntityReadonly
      */
     #[Assert\NotBlank]
     #[Assert\Uuid]
-    #[ORM\OneToOne(targetEntity: FinancesEvent::class, inversedBy: 'orders')]
+    #[ORM\OneToOne(targetEntity: FinancesEvent::class, inversedBy: 'ord')]
     #[ORM\JoinColumn(name: 'event', referencedColumnName: 'id')]
     private FinancesEvent $event;
 

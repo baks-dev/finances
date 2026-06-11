@@ -71,6 +71,7 @@ final class AllFinanceByOrderRepository implements AllFinanceByOrderInterface
                 type: OrderUid::TYPE,
             );
 
+
         $dbal
             ->addSelect('finances_event.price AS value')
             ->leftJoin(

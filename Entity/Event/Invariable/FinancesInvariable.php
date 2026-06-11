@@ -30,6 +30,7 @@ use BaksDev\Core\Type\UidType\UidType;
 use BaksDev\Finances\Entity\Event\FinancesEvent;
 use BaksDev\Finances\Type\Id\FinancesUid;
 use BaksDev\Users\User\Type\Id\UserUid;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
@@ -62,6 +63,11 @@ class FinancesInvariable extends EntityReadonly
     #[Assert\NotBlank]
     #[ORM\Column(type: UserUid::TYPE)]
     private UserUid $usr;
+
+    /** Дата */
+    #[Assert\NotBlank]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private DateTimeImmutable $create;
 
     public function __construct(FinancesEvent $event)
     {

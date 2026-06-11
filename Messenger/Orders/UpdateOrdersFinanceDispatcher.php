@@ -100,15 +100,7 @@ final readonly class UpdateOrdersFinanceDispatcher
 
         foreach($moneys as $money)
         {
-            if($money->getValue() > 0)
-            {
-                $total += $money->getValue(multiply: true);
-            }
-
-            if($money->getValue() < 0)
-            {
-                $total -= $money->getValue(multiply: true);
-            }
+            $total += $money->getValue();
         }
 
 

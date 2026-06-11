@@ -26,7 +26,10 @@ declare(strict_types=1);
 namespace BaksDev\Finances\Repository\AllFinance;
 
 use BaksDev\Finances\Type\Id\FinancesUid;
+use BaksDev\Orders\Order\Type\Id\OrderUid;
+use BaksDev\Reference\Money\Type\Money;
 use BaksDev\Users\User\Type\Id\UserUid;
+use DateTimeImmutable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /** @see FinanceResult */
@@ -35,6 +38,18 @@ final readonly class FinanceResult
     public function __construct(
         private string $id,
         private string $usr,
+        private string $date,
+
+        private ?string $identifier,
+        private ?string $number,
+        private ?string $payment_id,
+
+
+        private int $price,
+        private ?string $comment,
+
+        private ?string $order,
+        private ?string $posting,
     ) {}
 
     public function getId(): FinancesUid
@@ -47,4 +62,43 @@ final readonly class FinanceResult
         return new UserUid($this->usr);
     }
 
+    public function getPrice(): Money
+    {
+        return new Money($this->price, true);
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function getIdentifier(): ?string
+    {
+        return $this->identifier;
+    }
+
+    public function getNumber(): ?string
+    {
+        return $this->number;
+    }
+
+    public function getPaymentId(): ?string
+    {
+        return $this->payment_id;
+    }
+
+    public function getOrderPosting(): ?string
+    {
+        return $this->posting;
+    }
+
+    public function getOrderId(): ?OrderUid
+    {
+        return $this->order ? new OrderUid($this->order) : null;
+    }
+
+    public function getDate(): string
+    {
+        return new DateTimeImmutable($this->date)->format('d.m.Y');
+    }
 }
