@@ -55,11 +55,9 @@ final class StatisticsOrdersRepository implements StatisticsOrdersInterface
 
     public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder) {}
 
-    public function user(UserUid $user): self
+    public function forUser(UserUid $user): self
     {
-
         $this->user = $user;
-
         return $this;
     }
 
