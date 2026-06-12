@@ -31,6 +31,7 @@ use BaksDev\Finances\Entity\Finances;
 use BaksDev\Finances\Type\Id\FinancesUid;
 use BaksDev\Finances\UseCase\NewEdit\NewEditFinancesDTO;
 use BaksDev\Finances\UseCase\NewEdit\NewEditFinancesHandler;
+use BaksDev\Finances\UseCase\NewEdit\Payment\NewEditPaymentDTO;
 use BaksDev\Payment\Type\Id\PaymentUid;
 use BaksDev\Reference\Money\Type\Money;
 use BaksDev\Users\User\Type\Id\UserUid;
@@ -87,10 +88,12 @@ class NewFinancesHandlerTest extends KernelTestCase
         $NewEditFinancesMarketplaceDTO
             ->setToken(new Uuid(UserUid::TEST))
             ->setNumber(21212132321)
-            ->setIdentifier(8979878798)
-            ->setPayment(new PaymentUid(PaymentUid::TEST));
+            ->setIdentifier(8979878798);
 
-        $NewEditFinancesOrderDTO = $NewEditFinancesDTO->getOrders();
+        $NewEditFinancesOrderDTO = $NewEditFinancesDTO->getOrd();
+
+        $NewEditPaymentDTO = $NewEditFinancesDTO->getPayment();
+        $NewEditPaymentDTO->setValue(new PaymentUid(PaymentUid::TEST));
 
 
         /** @var NewEditFinancesHandler $NewEditFinancesHandler */

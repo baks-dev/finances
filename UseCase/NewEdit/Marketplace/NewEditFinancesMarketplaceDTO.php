@@ -48,9 +48,6 @@ final class NewEditFinancesMarketplaceDTO implements FinancesMarketplaceInterfac
     #[Assert\NotBlank]
     private Uuid|null $token = null;
 
-    /** Тип оплаты */
-    #[Assert\NotBlank]
-    private PaymentUid $payment;
 
     public function getIdentifier(): string
     {

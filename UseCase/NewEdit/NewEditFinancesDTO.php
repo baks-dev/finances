@@ -26,10 +26,12 @@ declare(strict_types=1);
 namespace BaksDev\Finances\UseCase\NewEdit;
 
 use BaksDev\Finances\Entity\Event\FinancesEventInterface;
+use BaksDev\Finances\Entity\Event\Payment\FinancesPayment;
 use BaksDev\Finances\Type\Event\FinancesEventUid;
 use BaksDev\Finances\UseCase\NewEdit\Invariable\NewEditFinancesInvariableDTO;
 use BaksDev\Finances\UseCase\NewEdit\Marketplace\NewEditFinancesMarketplaceDTO;
 use BaksDev\Finances\UseCase\NewEdit\Order\NewEditFinancesOrderDTO;
+use BaksDev\Finances\UseCase\NewEdit\Payment\NewEditPaymentDTO;
 use BaksDev\Finances\UseCase\NewEdit\Product\FinancesProductDTO;
 use BaksDev\Reference\Money\Type\Money;
 use Doctrine\DBAL\Types\Types;
@@ -47,18 +49,23 @@ final class NewEditFinancesDTO implements FinancesEventInterface
 
     /** FinancesInvariable */
     #[Assert\Valid]
-    private ?NewEditFinancesInvariableDTO $invariable = null;
+    private ?NewEditFinancesInvariableDTO $invariable;
 
     /** FinancesOrder */
     #[Assert\Valid]
-    private ?NewEditFinancesOrderDTO $ord = null;
+    private ?NewEditFinancesOrderDTO $ord;
 
     /** FinancesMarketplace */
     #[Assert\Valid]
-    private ?NewEditFinancesMarketplaceDTO $marketpace = null;
+    private ?NewEditFinancesMarketplaceDTO $marketpace;
 
     /** FinancesProduct */
-    private ?FinancesProductDTO $product = null;
+    #[Assert\Valid]
+    private ?FinancesProductDTO $product;
+
+    /** FinancesPayment */
+    #[Assert\Valid]
+    private ?NewEditPaymentDTO $payment;
 
     /** Стоимость */
     #[Assert\NotBlank]
@@ -73,6 +80,7 @@ final class NewEditFinancesDTO implements FinancesEventInterface
         $this->ord = new NewEditFinancesOrderDTO();
         $this->marketpace = new NewEditFinancesMarketplaceDTO();
         $this->product = new FinancesProductDTO();
+        $this->payment = new NewEditPaymentDTO();
     }
 
     /**
@@ -94,25 +102,6 @@ final class NewEditFinancesDTO implements FinancesEventInterface
         return $this;
     }
 
-    public function getInvariable(): ?NewEditFinancesInvariableDTO
-    {
-        return $this->invariable;
-    }
-
-    public function getOrd(): ?NewEditFinancesOrderDTO
-    {
-        return $this->ord;
-    }
-
-    public function getMarketpace(): ?NewEditFinancesMarketplaceDTO
-    {
-        return $this->marketpace;
-    }
-
-    public function getProduct(): ?FinancesProductDTO
-    {
-        return $this->product;
-    }
 
     public function getComment(): ?string
     {
@@ -123,5 +112,30 @@ final class NewEditFinancesDTO implements FinancesEventInterface
     {
         $this->comment = $comment;
         return $this;
+    }
+
+    public function getInvariable(): NewEditFinancesInvariableDTO
+    {
+        return $this->invariable ?: new NewEditFinancesInvariableDTO();
+    }
+
+    public function getOrd(): NewEditFinancesOrderDTO
+    {
+        return $this->ord ?: new NewEditFinancesOrderDTO();
+    }
+
+    public function getMarketpace(): NewEditFinancesMarketplaceDTO
+    {
+        return $this->marketpace ?: new NewEditFinancesMarketplaceDTO();
+    }
+
+    public function getProduct(): FinancesProductDTO
+    {
+        return $this->product ?: new FinancesProductDTO();
+    }
+
+    public function getPayment(): NewEditPaymentDTO
+    {
+        return $this->payment ?: new NewEditPaymentDTO();
     }
 }

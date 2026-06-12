@@ -28,11 +28,14 @@ namespace BaksDev\Finances\UseCase\NewEdit\Tests;
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Finances\Entity\Event\FinancesEvent;
 use BaksDev\Finances\Entity\Finances;
-use BaksDev\Finances\Repository\CurrentFinancesEventInterface;
+use BaksDev\Finances\Repository\CurrentFinancesEvent\CurrentFinancesEventInterface;
 use BaksDev\Finances\Type\Id\FinancesUid;
 use BaksDev\Finances\UseCase\NewEdit\NewEditFinancesDTO;
 use BaksDev\Finances\UseCase\NewEdit\NewEditFinancesHandler;
+use BaksDev\Finances\UseCase\NewEdit\Payment\NewEditPaymentDTO;
+use BaksDev\Orders\Order\Type\Id\OrderUid;
 use BaksDev\Payment\Type\Id\PaymentUid;
+use BaksDev\Reference\Money\Type\Money;
 use BaksDev\Users\User\Type\Id\UserUid;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DependsOnClass;
@@ -66,20 +69,31 @@ class EditFinancesHandlerTest extends KernelTestCase
         $NewEditFinancesMarketplaceDTO = $NewEditFinancesDTO->getMarketpace();
         self::assertEquals(21212132321, $NewEditFinancesMarketplaceDTO->getNumber());
         self::assertEquals(8979878798, $NewEditFinancesMarketplaceDTO->getIdentifier());
-        self::assertTrue($NewEditFinancesMarketplaceDTO->getPayment()->equals(PaymentUid::TEST));
         self::assertTrue($NewEditFinancesMarketplaceDTO->getToken()->equals(new Uuid(UserUid::TEST)));
 
+        $NewEditPaymentDTO = $NewEditFinancesDTO->getPayment();
+        self::assertTrue($NewEditPaymentDTO->getValue()->equals(PaymentUid::TEST));
 
         /** Обновляем объект */
+
+        $NewEditFinancesDTO
+            ->setPrice(new Money(101.43))
+            ->setComment('Комментарий');
+
         $NewEditFinancesInvariableDTO = $NewEditFinancesDTO->getInvariable();
         $NewEditFinancesInvariableDTO->setUsr(clone new UserUid(UserUid::TEST));
+
+        $NewEditFinancesOrderDTO = $NewEditFinancesDTO->getOrd();
+        $NewEditFinancesOrderDTO->setValue(new OrderUid(OrderUid::TEST));
 
         $NewEditFinancesMarketplaceDTO = $NewEditFinancesDTO->getMarketpace();
         $NewEditFinancesMarketplaceDTO
             ->setToken(new Uuid(UserUid::TEST_USER))
             ->setNumber(23323232232)
-            ->setIdentifier(4545454545)
-            ->setPayment(clone new PaymentUid(PaymentUid::TEST));
+            ->setIdentifier(4545454545);
+
+
+        $NewEditPaymentDTO->setValue(new PaymentUid(PaymentUid::TEST));
 
 
         /** @var NewEditFinancesHandler $NewEditFinancesHandler */

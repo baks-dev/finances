@@ -76,11 +76,6 @@ class FinancesMarketplace extends EntityReadonly
     #[ORM\Column(type: UidType::TYPE, nullable: true)]
     private Uuid|null $token = null;
 
-    /** Тип оплаты */
-    #[Assert\NotBlank]
-    #[ORM\Column(type: PaymentUid::TYPE)]
-    private PaymentUid $payment;
-
     public function __construct(FinancesEvent $event)
     {
         $this->event = $event;

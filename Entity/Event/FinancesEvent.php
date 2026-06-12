@@ -33,6 +33,7 @@ use BaksDev\Finances\Entity\Event\Invariable\FinancesInvariable;
 use BaksDev\Finances\Entity\Event\Marketplace\FinancesMarketplace;
 use BaksDev\Finances\Entity\Event\Modify\FinancesModify;
 use BaksDev\Finances\Entity\Event\Order\FinancesOrder;
+use BaksDev\Finances\Entity\Event\Payment\FinancesPayment;
 use BaksDev\Finances\Entity\Event\Product\FinancesProduct;
 use BaksDev\Finances\Entity\Finances;
 use BaksDev\Finances\Type\Event\FinancesEventUid;
@@ -84,6 +85,10 @@ class FinancesEvent extends EntityEvent
     /** FinancesMarketplace */
     #[ORM\OneToOne(targetEntity: FinancesMarketplace::class, mappedBy: 'event', cascade: ['all'])]
     private ?FinancesMarketplace $marketpace = null;
+
+    /** FinancesPayment */
+    #[ORM\OneToOne(targetEntity: FinancesPayment::class, mappedBy: 'event', cascade: ['all'])]
+    private ?FinancesPayment $payment = null;
 
     /** Стоимость */
     #[Assert\NotBlank]

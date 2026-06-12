@@ -40,7 +40,7 @@ final class NewEditFinancesOrderDTO implements FinancesOrderInterface
         return $this->value;
     }
 
-    public function setValue(OrderUid $value): self
+    public function setValue(?OrderUid $value): self
     {
         $this->value = $value;
         return $this;
