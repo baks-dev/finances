@@ -108,4 +108,9 @@ class FinancesInvariable extends EntityReadonly
 
         throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
     }
+
+    public function getUserFinance(): UserUid
+    {
+        return $this->usr;
+    }
 }

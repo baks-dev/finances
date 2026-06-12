@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\Finances\Repository\Statistics\Orders;
 
 use BaksDev\Payment\Type\Id\PaymentUid;
+use BaksDev\Reference\Money\Type\Money;
 use BaksDev\Users\User\Type\Id\UserUid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -48,8 +49,8 @@ final readonly class StatisticsOrdersResult
         return new UserUid($this->project_user);
     }
 
-    public function getTotal(): int
+    public function getTotal(): Money
     {
-        return $this->total;
+        return new Money($this->total, true);
     }
 }

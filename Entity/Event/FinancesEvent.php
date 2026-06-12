@@ -39,6 +39,7 @@ use BaksDev\Finances\Entity\Finances;
 use BaksDev\Finances\Type\Event\FinancesEventUid;
 use BaksDev\Finances\Type\Id\FinancesUid;
 use BaksDev\Orders\Order\Type\Id\OrderUid;
+use BaksDev\Payment\Type\Id\PaymentUid;
 use BaksDev\Reference\Money\Type\Money;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -167,6 +168,11 @@ class FinancesEvent extends EntityEvent
         throw new InvalidArgumentException(sprintf('Class %s interface error', $dto::class));
     }
 
+    public function isInvariable(): bool
+    {
+        return $this->invariable instanceof FinancesInvariable;
+    }
+
     public function getInvariable(): ?FinancesInvariable
     {
         return $this->invariable;
@@ -182,7 +188,6 @@ class FinancesEvent extends EntityEvent
         return $this->ord->getOrderId();
     }
 
-
     public function isMarketpace(): bool
     {
         return $this->marketpace instanceof FinancesMarketplace;
@@ -191,5 +196,15 @@ class FinancesEvent extends EntityEvent
     public function isProduct(): bool
     {
         return $this->product instanceof FinancesProduct;
+    }
+
+    public function isPayment(): bool
+    {
+        return $this->payment instanceof FinancesPayment;
+    }
+
+    public function getPayment(): PaymentUid
+    {
+        return $this->payment->getValue();
     }
 }

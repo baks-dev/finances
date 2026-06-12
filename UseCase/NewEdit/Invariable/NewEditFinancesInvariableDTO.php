@@ -60,13 +60,13 @@ final class NewEditFinancesInvariableDTO implements FinancesInvariableInterface
 
     public function getCreated(): DateTimeImmutable
     {
-        $this->created ?: $this->created = new DateTimeImmutable();
+        $this->created ?: $this->created = new DateTimeImmutable()->setTime(0, 0, 0);
         return $this->created;
     }
 
     public function setCreated(DateTimeImmutable $create): self
     {
-        $this->created = $create;
+        $this->created = $create->setTime(0, 0, 0);
         return $this;
     }
 }

@@ -47,35 +47,29 @@ class StatisticsOrdersInterfaceTest extends KernelTestCase
         /** @var StatisticsOrdersInterface $StatisticsOrdersRepository */
         $StatisticsOrdersRepository = self::getContainer()->get(StatisticsOrdersInterface::class);
 
-        $result = $StatisticsOrdersRepository
+        $StatisticsOrdersResult = $StatisticsOrdersRepository
             ->forPayment(new PaymentUid())
-            ->findAll();
+            ->find();
 
-        if(false === $result || false === $result->valid())
+        if(false === ($StatisticsOrdersResult instanceof StatisticsOrdersResult))
         {
             return;
         }
 
-        foreach($result as $StatisticsOrdersResult)
+        // Вызываем все геттеры
+        $reflectionClass = new ReflectionClass(StatisticsOrdersResult::class);
+        $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+        foreach($methods as $method)
         {
-            // Вызываем все геттеры
-            $reflectionClass = new ReflectionClass(StatisticsOrdersResult::class);
-            $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-
-            foreach($methods as $method)
+            // Методы без аргументов
+            if($method->getNumberOfParameters() === 0)
             {
-                // Методы без аргументов
-                if($method->getNumberOfParameters() === 0)
-                {
-                    // Вызываем метод
-                    $data = $method->invoke($StatisticsOrdersResult);
-                    // dump($data);
-                }
+                // Вызываем метод
+                $data = $method->invoke($StatisticsOrdersResult);
+                // dump($data);
             }
-
-            break;
         }
-
     }
 
 }

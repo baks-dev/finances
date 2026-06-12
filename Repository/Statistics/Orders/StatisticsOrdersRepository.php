@@ -33,9 +33,9 @@ use BaksDev\Finances\Entity\Event\Order\FinancesOrder;
 use BaksDev\Finances\Entity\Event\Payment\FinancesPayment;
 use BaksDev\Finances\Entity\Finances;
 use BaksDev\Payment\Type\Id\PaymentUid;
+use BaksDev\Users\User\Type\Id\UserUid;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
-use Generator;
 use InvalidArgumentException;
 
 
@@ -46,14 +46,22 @@ final class StatisticsOrdersRepository implements StatisticsOrdersInterface
 
     private bool $cache = false;
     private bool $hold = false;
-
-    private PaymentUid|false $payment;
-    /**
-     * @var true
-     */
     private bool|null $orders = null;
 
+    private PaymentUid|false $payment = false;
+
+    private UserUid|false $user = false;
+
+
     public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder) {}
+
+    public function user(UserUid $user): self
+    {
+
+        $this->user = $user;
+
+        return $this;
+    }
 
     public function forPayment(PaymentUid $payment): self
     {
@@ -82,6 +90,14 @@ final class StatisticsOrdersRepository implements StatisticsOrdersInterface
         return $this;
     }
 
+    /** Только по имеющимся заказам */
+    public function onlyNotOrders(): self
+    {
+        $this->orders = false;
+        return $this;
+    }
+
+
     /** Положительный баланс */
     public function onlyCache(): self
     {
@@ -97,9 +113,9 @@ final class StatisticsOrdersRepository implements StatisticsOrdersInterface
     }
 
     /**
-     * @return Generator<StatisticsOrdersResult>|false
+     * @return StatisticsOrdersResult|false
      */
-    public function findAll(): Generator|false
+    public function find(): StatisticsOrdersResult|false
     {
         if(false === ($this->payment instanceof PaymentUid))
         {
@@ -185,8 +201,11 @@ final class StatisticsOrdersRepository implements StatisticsOrdersInterface
 
         $dbal->allGroupByExclude();
 
-        return $dbal
-            // ->enableCache('Namespace', 3600)
-            ->fetchAllHydrate(StatisticsOrdersResult::class);
+        $result = $dbal->fetchHydrate(StatisticsOrdersResult::class);
+
+        $this->orders = null;
+
+        return $result;
+
     }
 }

@@ -24,14 +24,16 @@
 namespace BaksDev\Finances\Repository\Statistics\Orders;
 
 use BaksDev\Payment\Type\Id\PaymentUid;
+use BaksDev\Users\User\Type\Id\UserUid;
 use DateTimeImmutable;
-use Generator;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Autoconfigure(public: true, shared: false)] /* TODO: удалить !!! */
 interface StatisticsOrdersInterface
 {
     public function forPayment(PaymentUid $payment): self;
+
+    public function forUser(UserUid $user): self;
 
     /** Дата начала периода */
     public function dayFrom(DateTimeImmutable $day): self;
@@ -42,6 +44,9 @@ interface StatisticsOrdersInterface
     /** Только по имеющимся заказам */
     public function onlyOrders(): self;
 
+    /** Только по транзакциям не имеющих заказов */
+    public function onlyNotOrders(): self;
+
     /** Положительный баланс */
     public function onlyCache(): self;
 
@@ -49,7 +54,7 @@ interface StatisticsOrdersInterface
     public function onlyHold(): self;
 
     /**
-     * @return Generator<StatisticsOrdersResult>|false
+     * @return StatisticsOrdersResult|false
      */
-    public function findAll(): Generator|false;
+    public function find(): StatisticsOrdersResult|false;
 }
