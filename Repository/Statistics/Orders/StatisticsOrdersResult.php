@@ -36,7 +36,7 @@ final readonly class StatisticsOrdersResult
     public function __construct(
         private string $payment,
         private string $project_user,
-        private int $total
+        private int|string $total
     ) {}
 
     public function getPayment(): PaymentUid

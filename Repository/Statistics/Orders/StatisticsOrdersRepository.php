@@ -138,8 +138,8 @@ final class StatisticsOrdersRepository implements StatisticsOrdersInterface
             $dbal->join(
                 'finances_payment',
                 FinancesOrder::class,
-                'finances',
-                'finances.id = finances_payment.main',
+                'finances_order',
+                'finances_order.main = finances_payment.main',
             );
         }
 
@@ -193,8 +193,8 @@ final class StatisticsOrdersRepository implements StatisticsOrdersInterface
                 FinancesEvent::class,
                 'finances_event',
                 'finances_event.id = finances_payment.event'
-                .($this->cache ? 'finances_event.price > 0' : '')
-                .($this->hold ? 'finances_event.price < 0' : ''),
+                .($this->cache ? ' AND finances_event.price > 0' : '')
+                .($this->hold ? ' AND finances_event.price < 0' : ''),
             );
 
         $dbal->allGroupByExclude();
