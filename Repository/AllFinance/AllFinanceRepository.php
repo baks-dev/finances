@@ -32,6 +32,7 @@ use BaksDev\Finances\Entity\Event\FinancesEvent;
 use BaksDev\Finances\Entity\Event\Invariable\FinancesInvariable;
 use BaksDev\Finances\Entity\Event\Marketplace\FinancesMarketplace;
 use BaksDev\Finances\Entity\Event\Order\FinancesOrder;
+use BaksDev\Finances\Entity\Event\Payment\FinancesPayment;
 use BaksDev\Finances\Entity\Finances;
 use BaksDev\Orders\Order\Entity\Event\Posting\OrderPosting;
 use BaksDev\Orders\Order\Entity\Invariable\OrderInvariable;
@@ -97,13 +98,22 @@ final class AllFinanceRepository implements AllFinanceInterface
         $dbal
             ->addSelect('finances_marketplace.identifier AS identifier')
             ->addSelect('finances_marketplace.number AS number')
-            ->addSelect('finances_marketplace.payment AS payment_id')
             ->leftJoin(
                 'finance',
                 FinancesMarketplace::class,
                 'finances_marketplace',
                 'finances_marketplace.main = finance.id',
             );
+
+        $dbal
+            ->addSelect('finances_payment.value AS payment_id')
+            ->leftJoin(
+                'finance',
+                FinancesPayment::class,
+                'finances_payment',
+                'finances_payment.main = finance.id',
+            );
+
 
         $dbal
             ->leftJoin(

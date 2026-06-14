@@ -28,7 +28,6 @@ namespace BaksDev\Finances\Repository\Statistics\Orders;
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Finances\Entity\Event\FinancesEvent;
 use BaksDev\Finances\Entity\Event\Invariable\FinancesInvariable;
-use BaksDev\Finances\Entity\Event\Marketplace\FinancesMarketplace;
 use BaksDev\Finances\Entity\Event\Order\FinancesOrder;
 use BaksDev\Finances\Entity\Event\Payment\FinancesPayment;
 use BaksDev\Finances\Entity\Finances;
@@ -152,7 +151,7 @@ final class StatisticsOrdersRepository implements StatisticsOrdersInterface
                 'finances_order.main = finances_payment.main',
             );
 
-            $dbal->where('finances.id IS NULL');
+            $dbal->where('finances_order.main IS NULL');
         }
 
         $dbal->join(
@@ -172,19 +171,17 @@ final class StatisticsOrdersRepository implements StatisticsOrdersInterface
                     'finances_invariable',
                     '
                     finances_invariable.main = finances_payment.main
+                    AND finances_invariable.usr = :usr
                     AND DATE(finances_invariable.created) BETWEEN :date_from AND :date_to
                 ')
+                ->setParameter(
+                    key: 'usr',
+                    value: $this->user,
+                    type: UserUid::TYPE,
+                )
                 ->setParameter('date_from', $this->day_from, Types::DATE_IMMUTABLE)
                 ->setParameter('date_to', $this->day_to, Types::DATE_IMMUTABLE);
         }
-
-        $dbal
-            ->join(
-                'finances_payment',
-                FinancesMarketplace::class,
-                'finances_marketplace',
-                'finances_marketplace.main = finances_payment.main',
-            );
 
         $dbal
             ->addSelect('SUM(finances_event.price) AS total')
