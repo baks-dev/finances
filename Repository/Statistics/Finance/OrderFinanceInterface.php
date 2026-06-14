@@ -26,6 +26,7 @@ namespace BaksDev\Finances\Repository\Statistics\Finance;
 use BaksDev\Payment\Type\Id\PaymentUid;
 use BaksDev\Users\User\Type\Id\UserUid;
 use DateTimeImmutable;
+use Generator;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Autoconfigure(public: true)]
@@ -40,4 +41,11 @@ interface OrderFinanceInterface
 
     /** Дата окончания периода */
     public function dayTo(DateTimeImmutable $day): self;
+
+    /**
+     * Метод считает разницу между стоимостью товара в заказе и конечной стоимостью реализации
+     *
+     * @return Generator<OrderFinanceResult>|false
+     */
+    public function findAll(): Generator|false;
 }

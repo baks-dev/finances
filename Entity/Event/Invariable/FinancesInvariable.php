@@ -113,4 +113,9 @@ class FinancesInvariable extends EntityReadonly
     {
         return $this->usr;
     }
+
+    public function getDateCreated(): DateTimeImmutable
+    {
+        return $this->created;
+    }
 }

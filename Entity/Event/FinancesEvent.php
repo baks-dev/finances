@@ -41,6 +41,7 @@ use BaksDev\Finances\Type\Id\FinancesUid;
 use BaksDev\Orders\Order\Type\Id\OrderUid;
 use BaksDev\Payment\Type\Id\PaymentUid;
 use BaksDev\Reference\Money\Type\Money;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -206,5 +207,10 @@ class FinancesEvent extends EntityEvent
     public function getPayment(): PaymentUid
     {
         return $this->payment->getValue();
+    }
+
+    public function getDateCreated(): DateTimeImmutable
+    {
+        return $this->getInvariable()->getDateCreated();
     }
 }

@@ -94,7 +94,7 @@ final class OrderFinanceRepository implements OrderFinanceInterface
      *
      * @return Generator<OrderFinanceResult>|false
      */
-    public function findAll(): Generator|null
+    public function findAll(): Generator|false
     {
         $dbal = $this->DBALQueryBuilder->createQueryBuilder(self::class);
 
