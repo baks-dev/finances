@@ -1,11 +1,11 @@
 # Role
 
-FINANCES:
+ROLE_FINANCE:
   header: 'Финансы'
   name: 'Финансы'
   desc: 'Финансы'
 
 # Rules
-FINANCES_INDEX:
-  name: 'View'
+ROLE_FINANCE_INDEX:
+  name: 'Просмотр'
   desc: ''
