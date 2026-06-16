@@ -151,6 +151,8 @@ final class AllFinanceRepository implements AllFinanceInterface
                 ->addSearchLike('finances_marketplace.number');
         }
 
+        $dbal->orderBy('finances_invariable.created', 'DESC');
+
         return $this->Paginator->fetchAllHydrate($dbal, FinanceResult::class);
 
     }

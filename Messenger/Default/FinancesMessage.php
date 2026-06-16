@@ -46,6 +46,8 @@ final class FinancesMessage
      */
     private ?string $last;
 
+    private bool $force = false;
+
 
     public function __construct(
         FinancesUid|string $id,
@@ -83,6 +85,17 @@ final class FinancesMessage
     public function getLast(): ?FinancesEventUid
     {
         return $this->last ? new FinancesEventUid($this->last) : null;
+    }
+
+    public function isForce(): bool
+    {
+        return $this->force;
+    }
+
+    public function force(): self
+    {
+        $this->force = true;
+        return $this;
     }
 
 }
