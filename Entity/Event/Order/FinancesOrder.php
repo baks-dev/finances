@@ -29,6 +29,7 @@ use BaksDev\Core\Entity\EntityReadonly;
 use BaksDev\Finances\Entity\Event\FinancesEvent;
 use BaksDev\Finances\Type\Id\FinancesUid;
 use BaksDev\Orders\Order\Type\Id\OrderUid;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
@@ -64,6 +65,11 @@ class FinancesOrder extends EntityReadonly
     #[Assert\NotBlank]
     #[ORM\Column(type: OrderUid::TYPE)]
     private OrderUid $value;
+
+    /** Дата */
+    //#[Assert\NotBlank]
+    #[ORM\Column(name: 'first', type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $first = null;
 
 
     public function __construct(FinancesEvent $event)

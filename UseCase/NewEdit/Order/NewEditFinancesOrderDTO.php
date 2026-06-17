@@ -27,6 +27,8 @@ namespace BaksDev\Finances\UseCase\NewEdit\Order;
 
 use BaksDev\Finances\Entity\Event\Order\FinancesOrderInterface;
 use BaksDev\Orders\Order\Type\Id\OrderUid;
+use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /** @see FinancesOrder */
@@ -34,6 +36,15 @@ final class NewEditFinancesOrderDTO implements FinancesOrderInterface
 {
     /** Значение свойства */
     private ?OrderUid $value = null;
+
+    /** Дата */
+    #[Assert\NotBlank]
+    private DateTimeImmutable $first;
+
+    public function __construct()
+    {
+        $this->first = new DateTimeImmutable();
+    }
 
     public function getValue(): ?OrderUid
     {
@@ -43,6 +54,17 @@ final class NewEditFinancesOrderDTO implements FinancesOrderInterface
     public function setValue(?OrderUid $value): self
     {
         $this->value = $value;
+        return $this;
+    }
+
+    public function getFirst(): DateTimeImmutable
+    {
+        return $this->first;
+    }
+
+    public function setFirst(DateTimeImmutable $first): self
+    {
+        $this->first = $first;
         return $this;
     }
 }

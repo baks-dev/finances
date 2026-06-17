@@ -32,11 +32,11 @@ use BaksDev\Finances\Repository\CurrentFinancesEvent\CurrentFinancesEventInterfa
 use BaksDev\Finances\Type\Id\FinancesUid;
 use BaksDev\Finances\UseCase\NewEdit\NewEditFinancesDTO;
 use BaksDev\Finances\UseCase\NewEdit\NewEditFinancesHandler;
-use BaksDev\Finances\UseCase\NewEdit\Payment\NewEditPaymentDTO;
 use BaksDev\Orders\Order\Type\Id\OrderUid;
 use BaksDev\Payment\Type\Id\PaymentUid;
 use BaksDev\Reference\Money\Type\Money;
 use BaksDev\Users\User\Type\Id\UserUid;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DependsOnClass;
 use PHPUnit\Framework\Attributes\Group;
@@ -84,7 +84,9 @@ class EditFinancesHandlerTest extends KernelTestCase
         $NewEditFinancesInvariableDTO->setUsr(clone new UserUid(UserUid::TEST));
 
         $NewEditFinancesOrderDTO = $NewEditFinancesDTO->getOrd();
-        $NewEditFinancesOrderDTO->setValue(new OrderUid(OrderUid::TEST));
+        $NewEditFinancesOrderDTO
+            ->setValue(new OrderUid(OrderUid::TEST))
+            ->setFirst(new DateTimeImmutable('now'));
 
         $NewEditFinancesMarketplaceDTO = $NewEditFinancesDTO->getMarketpace();
         $NewEditFinancesMarketplaceDTO
@@ -92,15 +94,12 @@ class EditFinancesHandlerTest extends KernelTestCase
             ->setNumber(23323232232)
             ->setIdentifier(4545454545);
 
-
         $NewEditPaymentDTO->setValue(new PaymentUid(PaymentUid::TEST));
-
 
         /** @var NewEditFinancesHandler $NewEditFinancesHandler */
         $NewEditFinancesHandler = self::getContainer()->get(NewEditFinancesHandler::class);
         $handle = $NewEditFinancesHandler->handle($NewEditFinancesDTO);
 
         self::assertTrue(($handle instanceof Finances), $handle.': Ошибка Finances');
-
     }
 }

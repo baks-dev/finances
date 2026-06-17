@@ -29,8 +29,11 @@ namespace BaksDev\Finances\UseCase\NewEdit;
 use BaksDev\Core\Entity\AbstractHandler;
 use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Finances\Entity\Event\FinancesEvent;
+use BaksDev\Finances\Entity\Event\Order\FinancesOrder;
 use BaksDev\Finances\Entity\Finances;
 use BaksDev\Finances\Messenger\Default\FinancesMessage;
+use BaksDev\Finances\UseCase\NewEdit\Order\NewEditFinancesOrderDTO;
+use BaksDev\Orders\Order\Type\Id\OrderUid;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Autoconfigure(public: true)]
@@ -47,6 +50,23 @@ final class NewEditFinancesHandler extends AbstractHandler
         if($this->validatorCollection->isInvalid())
         {
             return $this->validatorCollection->getErrorUniqid();
+        }
+
+        /** Получаем все платежи по заказу и обновляем дату последнего платежа First */
+        if($command->getOrd()->getValue() instanceof OrderUid)
+        {
+            $orders = $this
+                ->getRepository(FinancesOrder::class)
+                ->findBy(['value' => $command->getOrd()->getValue()]);
+
+            foreach($orders as $FinancesOrder)
+            {
+                $NewEditFinancesOrderDTO = new NewEditFinancesOrderDTO();
+                $FinancesOrder->getDto($NewEditFinancesOrderDTO);
+
+                $NewEditFinancesOrderDTO->setFirst($command->getInvariable()->getCreated());
+                $FinancesOrder->setEntity($NewEditFinancesOrderDTO);
+            }
         }
 
         $this->flush();
