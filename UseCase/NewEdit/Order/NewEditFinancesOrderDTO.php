@@ -39,7 +39,7 @@ final class NewEditFinancesOrderDTO implements FinancesOrderInterface
 
     /** Дата */
     #[Assert\NotBlank]
-    private DateTimeImmutable $first;
+    private ?DateTimeImmutable $first;
 
     public function __construct()
     {
@@ -62,7 +62,7 @@ final class NewEditFinancesOrderDTO implements FinancesOrderInterface
         return $this->first;
     }
 
-    public function setFirst(DateTimeImmutable $first): self
+    public function setFirst(?DateTimeImmutable $first): self
     {
         $this->first = $first;
         return $this;

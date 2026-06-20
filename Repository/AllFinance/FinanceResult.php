@@ -39,6 +39,7 @@ final readonly class FinanceResult
         private string $id,
         private string $usr,
         private string $date,
+        private ?string $first,
 
         private ?string $identifier,
         private ?string $number,
@@ -101,4 +102,11 @@ final readonly class FinanceResult
     {
         return new DateTimeImmutable($this->date)->format('d.m.Y');
     }
+
+    public function getFirst(): ?string
+    {
+        return $this->first ? new DateTimeImmutable($this->first)->format('d.m.Y') : null;
+    }
+
+
 }

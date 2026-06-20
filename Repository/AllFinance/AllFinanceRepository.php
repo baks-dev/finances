@@ -116,6 +116,7 @@ final class AllFinanceRepository implements AllFinanceInterface
 
 
         $dbal
+            ->addSelect('finances_order.first AS first')
             ->leftJoin(
                 'finance',
                 FinancesOrder::class,
@@ -151,7 +152,9 @@ final class AllFinanceRepository implements AllFinanceInterface
                 ->addSearchLike('finances_marketplace.number');
         }
 
-        $dbal->orderBy('finances_invariable.created', 'DESC');
+        $dbal->addOrderBy('COALESCE(finances_order.first, finances_invariable.created)', 'DESC');
+        $dbal->addOrderBy('finances_invariable.created', 'DESC');
+        $dbal->addOrderBy('finances_invariable.main', 'DESC');
 
         return $this->Paginator->fetchAllHydrate($dbal, FinanceResult::class);
 
