@@ -43,7 +43,9 @@ final readonly class FinanceResult
 
         private ?string $identifier,
         private ?string $number,
+
         private ?string $payment_id,
+        private ?string $payment_name,
 
 
         private int $price,
@@ -86,6 +88,11 @@ final readonly class FinanceResult
     public function getPaymentId(): ?string
     {
         return $this->payment_id;
+    }
+
+    public function getPaymentName(): ?string
+    {
+        return $this->payment_name;
     }
 
     public function getOrderPosting(): ?string

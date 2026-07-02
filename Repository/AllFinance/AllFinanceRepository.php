@@ -114,6 +114,23 @@ final class AllFinanceRepository implements AllFinanceInterface
                 'finances_payment.main = finance.id',
             );
 
+        $dbal
+            ->leftJoin(
+                'finances_payment',
+                Payment::class,
+                'payment',
+                'payment.id = finances_payment.value',
+            );
+
+        $dbal
+            ->addSelect('payment_trans.name AS payment_name')
+            ->leftJoin(
+                'order_product_payment',
+                PaymentTrans::class,
+                'payment_trans',
+                'payment_trans.event = payment.event AND payment_trans.local = :local',
+            );
+
 
         $dbal
             ->addSelect('finances_order.first AS first')
